@@ -5,6 +5,7 @@ import Register from "../views/Register.vue";
 import Supplier from "../views/Supplier.vue";
 import Affiliate from "../views/Affiliate.vue";
 import AffiliateProduct from "../views/AffiliateProduct.vue";
+import CustomerProduct from "../views/CustomerProduct.vue";
 
 Vue.use(VueRouter);
 
@@ -30,9 +31,14 @@ const routes = [
     component: Affiliate,
   },
   {
-    path: "/affiliate/product/:id",
+    path: "/affiliate/product/:product_id",
     name: "AffiliateProduct",
     component: AffiliateProduct,
+  },
+  {
+    path: "/affiliate/:customer_id/product/:product_id",
+    name: "AffiliateProduct",
+    component: CustomerProduct,
   },
 ];
 

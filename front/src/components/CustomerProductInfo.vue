@@ -7,16 +7,15 @@
         </h3>
       </div>
       <div class="mt-3">
-        <small>Preço de venda</small>
         <h4 class="product-price">R$ {{ product.price.toFixed(2) }}</h4>
       </div>
-      <div class="mt-3">
-        <small>Comissão</small>
-        <br />
-        <h4 class="product-comission">R$ {{ product.comission.toFixed(2) }}</h4>
-        <small>por unidade vendida</small>
+      <div class="mt-4">
+        <small
+          >Quantidade disponível:
+          <b>{{ product.quantity }} {{ quantityLabel }}</b></small
+        >
       </div>
-      <hr class="my-5" />
+      <hr class="my-4" />
       <div class="w-100">
         <b-button
           class="w-100"
@@ -26,7 +25,7 @@
           @click="submit"
         >
           <b-spinner v-if="loading" small />
-          Venda esse produto
+          Comprar agora
         </b-button>
       </div>
     </b-card>
@@ -46,6 +45,11 @@ export default {
   mounted() {
     this.currentImage = this.product.image_1;
   },
+  computed: {
+    quantityLabel() {
+      return this.product.quantity > 1 ? "unidades" : "unidade";
+    },
+  },
   methods: {
     showImage(image) {
       this.currentImage = image;
@@ -63,11 +67,8 @@ export default {
 
 <style lang="scss">
 h4.product-price {
-  font-weight: normal;
-}
-h4.product-comission {
-  font-weight: 500;
+  font-weight: 200 !important;
   font-size: 35px;
-  margin-bottom: 0px;
+  font-weight: 500;
 }
 </style>

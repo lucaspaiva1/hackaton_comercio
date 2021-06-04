@@ -2,9 +2,9 @@
   <div class="nav">
     <div class="container">
       <div>
-        VSQUAD
+        VendX
       </div>
-      <div>
+      <div v-if="!customer">
         <span class="logout" @click="logout">Sair</span>
       </div>
     </div>
@@ -13,6 +13,7 @@
 <script>
 export default {
   name: "NavBar",
+  props: ["customer"],
   methods: {
     logout() {
       this.$router.push({ path: "/login" });
