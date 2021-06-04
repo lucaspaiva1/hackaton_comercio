@@ -3,6 +3,7 @@ import VueRouter from "vue-router";
 import Login from "../views/Login.vue";
 import Register from "../views/Register.vue";
 import Supplier from "../views/Supplier.vue";
+import Affiliate from "../views/Affiliate.vue";
 
 Vue.use(VueRouter);
 
@@ -21,6 +22,11 @@ const routes = [
     path: "/supplier",
     name: "Supplier",
     component: Supplier,
+  },
+  {
+    path: "/affiliate",
+    name: "Affiliate",
+    component: Affiliate,
   },
 ];
 

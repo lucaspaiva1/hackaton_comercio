@@ -14,7 +14,7 @@
           id="name"
           name="name"
           v-model="form.name"
-          v-validate="{ required: true, min: 3 }"
+          required
           data-vv-as="Name"
         ></b-form-input>
       </b-form-group>
@@ -24,7 +24,7 @@
           id="name"
           name="name"
           v-model="form.name"
-          v-validate="{ required: true, min: 3 }"
+          required
           data-vv-as="Name"
         ></b-form-input>
       </b-form-group>
@@ -35,7 +35,7 @@
           name="password"
           type="password"
           v-model="form.password"
-          v-validate="{ required: true }"
+          required
           data-vv-as="Senha"
         ></b-form-input>
       </b-form-group>
@@ -44,7 +44,7 @@
           class="form-control"
           v-model="form.city"
           :options="city_options"
-          v-validate="{ required: true }"
+          required
         ></b-form-select>
       </b-form-group>
 
@@ -62,7 +62,7 @@
 
 <script>
 export default {
-  name: "LoginForm",
+  name: "RegisterForm",
   data() {
     return {
       form: {

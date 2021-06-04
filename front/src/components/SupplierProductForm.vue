@@ -49,8 +49,7 @@
             class="form-control"
             placeholder="Observações sobre o produto"
             v-model="form.observations"
-            :options="city_options"
-            v-validate="{ required: true }"
+            required
             rows="4"
             max-rows="4"
           ></b-form-textarea>

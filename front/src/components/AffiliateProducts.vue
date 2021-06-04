@@ -14,14 +14,15 @@
 
 <script>
 export default {
-  name: "SupplierProducts",
+  name: "AffiliateProducts",
   props: ["products"],
   data() {
     return {
       fields: [
         { key: "name", label: "Name" },
-        { key: "price", label: "Preço" },
         { key: "quantity", label: "Estoque" },
+        { key: "price", label: "Preço" },
+        { key: "comission", label: "Comissão" },
       ],
     };
   },
