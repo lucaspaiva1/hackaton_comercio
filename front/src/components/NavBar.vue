@@ -16,6 +16,7 @@ export default {
   props: ["customer"],
   methods: {
     logout() {
+      localStorage.clear();
       this.$router.push({ path: "/login" });
     },
   },

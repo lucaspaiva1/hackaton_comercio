@@ -10,6 +10,7 @@ import CustomerProduct from "../views/CustomerProduct.vue";
 Vue.use(VueRouter);
 
 const routes = [
+  { path: "/", redirect: "/login" },
   {
     path: "/login",
     name: "Login",
