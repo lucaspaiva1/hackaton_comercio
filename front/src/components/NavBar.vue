@@ -2,7 +2,7 @@
   <div class="nav">
     <div class="container">
       <div>
-        VendX
+        VSquad
       </div>
       <div v-if="!customer">
         <span class="logout" @click="logout">Sair</span>

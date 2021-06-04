@@ -1,6 +1,6 @@
 <template>
   <div class="container loginPage">
-    <img alt="Vue logo" width="200px" src="../assets/logo.png" />
+    <div class="logo">VSquad</div>
 
     <RegisterForm class="registerForm" />
   </div>
@@ -28,5 +28,11 @@ export default {
 
 .registerForm {
   width: 100%;
+}
+
+.logo {
+  font-size: 50px;
+  font-weight: 500;
+  padding: 4.5rem 0px;
 }
 </style>

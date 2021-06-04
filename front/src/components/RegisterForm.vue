@@ -21,11 +21,11 @@
 
       <b-form-group label="CPF/CNPJ">
         <b-form-input
-          id="name"
-          name="name"
-          v-model="form.name"
+          id="document"
+          name="document"
+          v-model="form.document"
           required
-          data-vv-as="Name"
+          data-vv-as="CPF/CNPJ"
         ></b-form-input>
       </b-form-group>
 
