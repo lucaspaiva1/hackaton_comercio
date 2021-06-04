@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-card title="Novo Produto" tag="article" class="m-3">
+    <b-card title="Novo Produto" class="m-3">
       <b-form @submit.stop.prevent="onSubmit">
         <b-form-group label="Nome">
           <b-form-input

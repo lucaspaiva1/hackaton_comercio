@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-card title="Produtos disponíveis" tag="article" class="m-3">
+    <b-card title="Produtos disponíveis" class="m-3">
       <b-row>
         <b-col lg="6" class="my-1">
           <b-form-group
@@ -42,6 +42,7 @@
         show-empty
         small
         responsive
+        @row-clicked="openProduct"
         @filtered="onFiltered"
       >
       </b-table>
@@ -67,72 +68,84 @@ export default {
     return {
       items: [
         {
+          id: 1,
           name: "Dickerson",
           quantity: 40,
           price: 40,
           comission: 40,
         },
         {
+          id: 2,
           name: "Larsen",
           quantity: 21,
           price: 21,
           comission: 21,
         },
         {
+          id: 3,
           name: "Mini",
           quantity: 9,
           price: 9,
           comission: 9,
         },
         {
+          id: 4,
           name: "Geneva",
           quantity: 89,
           price: 89,
           comission: 89,
         },
         {
+          id: 5,
           name: "Jami",
           quantity: 38,
           price: 38,
           comission: 38,
         },
         {
+          id: 1,
           name: "Essie",
           quantity: 27,
           price: 27,
           comission: 27,
         },
         {
+          id: 1,
           name: "Thor",
           quantity: 40,
           price: 40,
           comission: 40,
         },
         {
+          id: 1,
           name: "Larsen",
           quantity: 87,
           price: 87,
           comission: 87,
         },
         {
+          id: 1,
           name: "Mitzi",
           quantity: 26,
           price: 26,
           comission: 26,
         },
         {
+          id: 1,
           name: "Genevieve",
           quantity: 22,
           price: 22,
           comission: 22,
         },
         {
+          id: 1,
           name: "John",
           quantity: 38,
           price: 38,
           comission: 38,
         },
         {
+          id: 1,
           name: "Dick",
           quantity: 29,
           price: 29,
@@ -203,6 +216,9 @@ export default {
     onFiltered(filteredItems) {
       this.totalRows = filteredItems.length;
       this.currentPage = 1;
+    },
+    openProduct(item) {
+      this.$router.push({ path: `/affiliate/product/${item.id}` });
     },
   },
 };

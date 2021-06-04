@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-card title="Meus Produtos" tag="article" class="m-3">
+    <b-card title="Meus Produtos" class="m-3">
       <b-table
         striped
         hover
