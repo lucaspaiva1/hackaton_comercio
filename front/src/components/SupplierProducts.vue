@@ -2,12 +2,17 @@
   <div>
     <b-card title="Meus Produtos" class="m-3">
       <b-table
+        :busy="loading"
         striped
         hover
         borderless
         :items="products"
         :fields="fields"
-      ></b-table>
+      >
+        <template #cell(price)="data">
+          R$ {{ parseFloat(data.item.price).toFixed(2) }}
+        </template>
+      </b-table>
     </b-card>
   </div>
 </template>
@@ -15,7 +20,7 @@
 <script>
 export default {
   name: "SupplierProducts",
-  props: ["products"],
+  props: ["products", "loading"],
   data() {
     return {
       fields: [

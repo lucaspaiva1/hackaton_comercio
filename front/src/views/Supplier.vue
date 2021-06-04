@@ -6,10 +6,10 @@
     <div class="container">
       <b-row>
         <b-col sm="6">
-          <SupplierProductForm />
+          <SupplierProductForm @created="onCreateProduct" />
         </b-col>
         <b-col sm="6">
-          <SupplierProducts :products="products" />
+          <SupplierProducts :loading="loading" :products="products" />
         </b-col>
       </b-row>
     </div>
@@ -17,26 +17,10 @@
 </template>
 
 <script>
+import API from "@/api";
 import NavBar from "@/components/NavBar.vue";
 import SupplierProducts from "@/components/SupplierProducts.vue";
 import SupplierProductForm from "@/components/SupplierProductForm.vue";
-
-const products = [
-  {
-    name: "Capa iphone 8",
-    price: 10.9,
-    comission: 1.0,
-    quantity: 10,
-    observations: "",
-  },
-  {
-    name: "Capa iphone 8 plus",
-    price: 10.9,
-    comission: 1.0,
-    observations: "",
-    quantity: 5,
-  },
-];
 
 export default {
   name: "Supplier",
@@ -47,8 +31,24 @@ export default {
   },
   data() {
     return {
-      products,
+      products: [],
+      loading: false,
     };
+  },
+  mounted() {
+    this.loadProducts();
+  },
+  methods: {
+    async loadProducts() {
+      const supplier = JSON.parse(localStorage.getItem("current_user"));
+      this.loading = true;
+      const response = await API.productsBySupplier(supplier.user.id);
+      this.products = response.data;
+      this.loading = false;
+    },
+    onCreateProduct() {
+      this.loadProducts();
+    },
   },
 };
 </script>

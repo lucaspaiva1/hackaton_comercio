@@ -13,11 +13,16 @@ const login = ({ username, password }) => {
   );
 };
 
-const getAllProducts = () => {
-  return axios.get(`${BASE_URL}/suppliers`);
+const productsBySupplier = (supplier_id) => {
+  return axios.get(`${BASE_URL}/products?supplier=${supplier_id}`);
+};
+
+const createProduct = (product) => {
+  return axios.post(`${BASE_URL}/products`, product);
 };
 
 export default {
   login,
-  getAllProducts,
+  productsBySupplier,
+  createProduct,
 };

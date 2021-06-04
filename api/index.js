@@ -1,5 +1,4 @@
 const express = require("express");
-const cors = require("cors");
 const db = require("./models");
 
 const app = express();
@@ -7,7 +6,6 @@ const app = express();
 app.use(express.urlencoded({ extended: false }));
 
 app.use(express.json());
-// app.use(cors());
 
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -19,7 +17,6 @@ app.use(function (req, res, next) {
 });
 
 app.post("/login", async (req, res) => {
-  console.log("here");
   try {
     const supplier = await db.Supplier.findOne({
       where: {
@@ -54,7 +51,7 @@ app.get("/suppliers", (req, res) => {
 app.post("/suppliers", (req, res) => {
   const { name, password, document, city } = req.body;
   return db.Supplier.create({ name, password, document, city })
-    .then((contact) => res.send(contact))
+    .then((supplier) => res.send(supplier))
     .catch((err) => {
       return res.status(400).send(err);
     });
@@ -71,7 +68,42 @@ app.get("/affiliates", (req, res) => {
 app.post("/affiliates", (req, res) => {
   const { name, password, document, city } = req.body;
   return db.Affiliate.create({ name, password, document, city })
-    .then((contact) => res.send(contact))
+    .then((affiliate) => res.send(affiliate))
+    .catch((err) => {
+      return res.status(400).send(err);
+    });
+});
+
+app.get("/products", (req, res) => {
+  return db.Product.findAll()
+    .then((product) => res.send(product))
+    .catch((err) => {
+      return res.send(err);
+    });
+});
+
+app.post("/products", (req, res) => {
+  const {
+    name,
+    description,
+    quantity,
+    price,
+    comission,
+    image_1,
+    image_2,
+    image_3,
+  } = req.body;
+  return db.Product.create({
+    name,
+    description,
+    quantity,
+    price,
+    comission,
+    image_1,
+    image_2,
+    image_3,
+  })
+    .then((product) => res.send(product))
     .catch((err) => {
       return res.status(400).send(err);
     });
