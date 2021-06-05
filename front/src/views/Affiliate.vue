@@ -42,7 +42,9 @@ export default {
       availableProducts: [],
       loading: false,
       loadingProducts: false,
+      loadingOrders: false,
       affiliate: null,
+      orders: [],
     };
   },
   mounted() {
