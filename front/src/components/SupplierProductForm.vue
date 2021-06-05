@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-card title="Novo Produto" class="m-3">
+    <b-card title="Cadastrar Produto" class="m-3">
       <b-form @submit.stop.prevent="onSubmit">
         <b-form-group label="Nome">
           <b-form-input
@@ -59,6 +59,66 @@
           ></b-col>
         </b-row>
 
+        <b-row>
+          <b-col>
+            <b-form-group label="">
+              <b-form-checkbox
+                v-model="form.delivery"
+                name="check-button"
+                class="mt-4"
+                :switch="true"
+                padding
+              >
+                Habilitar Entrega
+              </b-form-checkbox>
+            </b-form-group>
+          </b-col>
+          <b-col>
+            <b-form-group label="Valor da entrega" v-if="form.delivery">
+              <b-form-input
+                id="delivery_price"
+                name="delivery_price"
+                type="number"
+                v-model="form.delivery_price"
+                required
+                data-vv-as="Valor da entrega"
+              ></b-form-input> </b-form-group
+          ></b-col>
+        </b-row>
+
+        <b-row class="mt-3">
+          <b-col>
+            <vue-image-chooser
+              height="120px"
+              name="image-chooser1"
+              :displayName="'Addd'"
+              @change="(file) => uploadFile(file, 1)"
+              :progress="progress"
+              :error="error"
+            />
+          </b-col>
+          <b-col>
+            <vue-image-chooser
+              height="120px"
+              name="image-chooser2"
+              :displayName="'Adicionar foto'"
+              @change="(file) => uploadFile(file, 2)"
+              :progress="progress"
+              :error="error"
+            />
+          </b-col>
+          <b-col>
+            <vue-image-chooser
+              height="120px"
+              name="image-chooser3"
+              :displayName="'Adicionar foto'"
+              @change="(file) => uploadFile(file, 3)"
+              :progress="progress"
+              :error="error"
+            />
+          </b-col>
+        </b-row>
+
         <div class="mt-3">
           <b-button type="submit" variant="success">Cadastrar</b-button>
         </div>
@@ -80,6 +140,8 @@ export default {
         price: 0,
         comission: 0,
         quantity: 0,
+        delivery: false,
+        delivery_price: 0,
       },
       supplier: null,
       loading: false,
@@ -105,6 +167,9 @@ export default {
         quantity: 0,
       };
     },
+    uploadFile(file, id) {
+      console.log(id, file);
+    },
     async onSubmit() {
       this.loading = true;
       try {
@@ -119,3 +184,23 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+.image-uploader {
+  box-shadow: none !important;
+  background-position: center !important;
+  label {
+    padding-top: 1.5rem !important;
+    padding-bottom: 1rem !important;
+  }
+  svg {
+    width: 20px !important;
+    height: 20px !important;
+  }
+  p {
+    content: "test" !important;
+    line-height: 6rem !important;
+    text-align: center !important;
+  }
+}
+</style>

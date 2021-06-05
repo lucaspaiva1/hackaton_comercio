@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-card title="Produtos disponíveis" class="m-3">
+    <b-card title="Meus Pedidos" class="m-3">
       <b-row>
         <b-col lg="6" class="my-1">
           <b-form-group
@@ -30,7 +30,7 @@
       </b-row>
 
       <b-table
-        :items="items"
+        :items="orders"
         :fields="fields"
         :current-page="currentPage"
         :per-page="perPage"
@@ -45,6 +45,18 @@
         @row-clicked="openProduct"
         @filtered="onFiltered"
       >
+        <template #cell(name)="data">
+          {{ data.item.product.name }}
+        </template>
+        <template #cell(price)="data">
+          R$ {{ parseFloat(data.item.product.price).toFixed(2) }}
+        </template>
+        <template #cell(comission)="data">
+          R$ {{ parseFloat(data.item.product.comission).toFixed(2) }}
+        </template>
+        <template #cell(status)="data">
+          {{ translateStatus(data.item.status) }}
+        </template>
       </b-table>
 
       <b-col class="my-1">
@@ -54,7 +66,7 @@
           :per-page="perPage"
           align="fill"
           size="sm"
-          class="my-0"
+          class="my-0 pagination"
         ></b-pagination>
       </b-col>
     </b-card>
@@ -64,114 +76,25 @@
 <script>
 export default {
   name: "AllProductsList",
+  props: ["orders"],
   data() {
     return {
-      items: [
-        {
-          id: 1,
-          name: "Iphone SE",
-          quantity: 40,
-          price: "R$ 40.00",
-          comission: "R$ 4.00",
-        },
-        {
-          id: 2,
-          name: "Televisao Samsung 42'",
-          quantity: 21,
-          price: "R$ 21.00",
-          comission: "R$ 2.00",
-        },
-        {
-          id: 3,
-          name: "Sofá 2.4m",
-          quantity: 9,
-          price: "R$ 9.00",
-          comission: "R$ 0.80",
-        },
-        {
-          id: 4,
-          name: "Geneva",
-          quantity: 89,
-          price: "R$ 89.00",
-          comission: "R$ 9.00",
-        },
-        {
-          id: 5,
-          name: "Jami",
-          quantity: 38,
-          price: "R$ 38.00",
-          comission: "R$ 3.00",
-        },
-        {
-          id: 1,
-          name: "Essie",
-          quantity: 27,
-          price: "R$ 27.00",
-          comission: "R$ 7.00",
-        },
-        {
-          id: 1,
-          name: "Thor",
-          quantity: 40,
-          price: "R$ 40.00",
-          comission: "R$ 4.00",
-        },
-        {
-          id: 1,
-          name: "Larsen",
-          quantity: 87,
-          price: "R$ 87.00",
-          comission: "R$ 7.00",
-        },
-        {
-          id: 1,
-          name: "Mitzi",
-          quantity: 26,
-          price: "R$ 26.00",
-          comission: "R$ 2.00",
-        },
-        {
-          id: 1,
-          name: "Genevieve",
-          quantity: 22,
-          price: "R$ 22.00",
-          comission: "R$ 2.00",
-        },
-        {
-          id: 1,
-          name: "John",
-          quantity: 38,
-          price: "R$ 38.00",
-          comission: "R$ 8.00",
-        },
-        {
-          id: 1,
-          name: "Dick",
-          quantity: 29,
-          price: "R$ 29.00",
-          comission: "R$ 2.00",
-        },
-      ],
       fields: [
         {
           key: "name",
           label: "Nome",
-          sortable: true,
-          sortDirection: "desc",
-        },
-        {
-          key: "quantity",
-          label: "Estoque",
-          sortable: true,
         },
         {
           key: "price",
           label: "Preço",
-          sortable: true,
         },
         {
           key: "comission",
           label: "Comissão",
+        },
+        {
+          key: "status",
+          label: "Status",
           sortable: true,
         },
       ],
@@ -184,11 +107,6 @@ export default {
       sortDirection: "asc",
       filter: null,
       filterOn: [],
-      infoModal: {
-        id: "info-modal",
-        title: "",
-        content: "",
-      },
     };
   },
   computed: {
@@ -201,24 +119,25 @@ export default {
     },
   },
   mounted() {
-    this.totalRows = this.items.length;
+    this.totalRows = this.orders.length;
   },
   methods: {
-    info(item, index, button) {
-      this.infoModal.title = `Row index: ${index}`;
-      this.infoModal.content = JSON.stringify(item, null, 2);
-      this.$root.$emit("bv::show::modal", this.infoModal.id, button);
-    },
-    resetInfoModal() {
-      this.infoModal.title = "";
-      this.infoModal.content = "";
-    },
     onFiltered(filteredItems) {
       this.totalRows = filteredItems.length;
       this.currentPage = 1;
     },
     openProduct(item) {
       this.$router.push({ path: `/affiliate/product/${item.id}` });
+    },
+    translateStatus(status) {
+      switch (status) {
+        case "pending":
+          return "Pendente";
+
+        case "done":
+          return "Entregue";
+      }
+      return status;
     },
   },
 };
@@ -231,5 +150,8 @@ table {
       display: none !important;
     }
   }
+}
+.pagination {
+  max-width: 400px;
 }
 </style>
