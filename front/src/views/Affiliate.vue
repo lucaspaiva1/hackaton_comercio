@@ -6,7 +6,7 @@
     <div class="container">
       <b-row>
         <b-col sm="6">
-          <AllProductsList :products="products" />
+          <AffiliateAvailableProductsList :products="availableProducts" />
         </b-col>
         <b-col sm="6">
           <AffiliateProducts :products="products" />
@@ -19,8 +19,8 @@
 <script>
 import NavBar from "@/components/NavBar.vue";
 import AffiliateProducts from "@/components/AffiliateProducts.vue";
-import AllProductsList from "@/components/AllProductsList.vue";
-
+import AffiliateAvailableProductsList from "@/components/AffiliateAvailableProductsList.vue";
+import API from "@/api";
 const products = [
   {
     name: "Capa iphone 8",
@@ -43,12 +43,28 @@ export default {
   components: {
     NavBar,
     AffiliateProducts,
-    AllProductsList,
+    AffiliateAvailableProductsList,
   },
   data() {
     return {
       products,
+      availableProducts: [],
+      loading: false,
+      affiliate: null,
     };
+  },
+  mounted() {
+    this.affiliate = JSON.parse(localStorage.getItem("current_user"));
+    this.loadAvailableProducts();
+  },
+  methods: {
+    async loadAvailableProducts() {
+      this.loading = true;
+      const response = await API.productsAvailable(this.affiliate.user.id);
+      this.availableProducts = response.data;
+      console.log(response.data);
+      this.loading = true;
+    },
   },
 };
 </script>

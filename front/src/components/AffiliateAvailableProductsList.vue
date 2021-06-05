@@ -41,10 +41,20 @@
         :sort-direction="sortDirection"
         show-empty
         small
+        hover
         responsive
         @row-clicked="openProduct"
         @filtered="onFiltered"
       >
+        <template #cell(quantity)="data">
+          R$ {{ parseFloat(data.item.quantity).toFixed(2) }}
+        </template>
+        <template #cell(price)="data">
+          R$ {{ parseFloat(data.item.price).toFixed(2) }}
+        </template>
+        <template #cell(comission)="data">
+          R$ {{ parseFloat(data.item.comission).toFixed(2) }}
+        </template>
       </b-table>
 
       <b-col class="my-1">
@@ -63,95 +73,11 @@
 
 <script>
 export default {
-  name: "AllProductsList",
+  name: "AffiliateAvailableProductsList",
+  props: ["products"],
   data() {
     return {
-      items: [
-        {
-          id: 1,
-          name: "Iphone SE",
-          quantity: 40,
-          price: "R$ 40.00",
-          comission: "R$ 4.00",
-        },
-        {
-          id: 2,
-          name: "Televisao Samsung 42'",
-          quantity: 21,
-          price: "R$ 21.00",
-          comission: "R$ 2.00",
-        },
-        {
-          id: 3,
-          name: "Sofá 2.4m",
-          quantity: 9,
-          price: "R$ 9.00",
-          comission: "R$ 0.80",
-        },
-        {
-          id: 4,
-          name: "Geneva",
-          quantity: 89,
-          price: "R$ 89.00",
-          comission: "R$ 9.00",
-        },
-        {
-          id: 5,
-          name: "Jami",
-          quantity: 38,
-          price: "R$ 38.00",
-          comission: "R$ 3.00",
-        },
-        {
-          id: 1,
-          name: "Essie",
-          quantity: 27,
-          price: "R$ 27.00",
-          comission: "R$ 7.00",
-        },
-        {
-          id: 1,
-          name: "Thor",
-          quantity: 40,
-          price: "R$ 40.00",
-          comission: "R$ 4.00",
-        },
-        {
-          id: 1,
-          name: "Larsen",
-          quantity: 87,
-          price: "R$ 87.00",
-          comission: "R$ 7.00",
-        },
-        {
-          id: 1,
-          name: "Mitzi",
-          quantity: 26,
-          price: "R$ 26.00",
-          comission: "R$ 2.00",
-        },
-        {
-          id: 1,
-          name: "Genevieve",
-          quantity: 22,
-          price: "R$ 22.00",
-          comission: "R$ 2.00",
-        },
-        {
-          id: 1,
-          name: "John",
-          quantity: 38,
-          price: "R$ 38.00",
-          comission: "R$ 8.00",
-        },
-        {
-          id: 1,
-          name: "Dick",
-          quantity: 29,
-          price: "R$ 29.00",
-          comission: "R$ 2.00",
-        },
-      ],
+      items: [],
       fields: [
         {
           key: "name",
@@ -202,6 +128,7 @@ export default {
   },
   mounted() {
     this.totalRows = this.items.length;
+    this.items = [...this.products];
   },
   methods: {
     info(item, index, button) {
@@ -221,6 +148,16 @@ export default {
       this.$router.push({ path: `/affiliate/product/${item.id}` });
     },
   },
+  watch: {
+    products(value) {
+      this.items = value.map((product) => ({
+        name: product.name,
+        price: product.price,
+        comission: product.comission,
+        quantity: product.quantity,
+      }));
+    },
+  },
 };
 </script>
 
@@ -230,6 +167,9 @@ table {
     .sr-only {
       display: none !important;
     }
+  }
+  tr {
+    cursor: pointer;
   }
 }
 </style>

@@ -75,7 +75,7 @@
 
 <script>
 export default {
-  name: "AllProductsList",
+  name: "SupplierOrders",
   props: ["orders"],
   data() {
     return {

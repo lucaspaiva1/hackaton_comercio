@@ -17,6 +17,10 @@ const productsBySupplier = (supplier_id) => {
   return axios.get(`${BASE_URL}/products?supplier=${supplier_id}`);
 };
 
+const productsAvailable = (to_affiliate) => {
+  return axios.get(`${BASE_URL}/products?to_affiliate=${to_affiliate}`);
+};
+
 const createProduct = (product) => {
   return axios.post(`${BASE_URL}/products`, product);
 };
@@ -35,4 +39,5 @@ export default {
   createProduct,
   createAffiliate,
   createSupplier,
+  productsAvailable,
 };

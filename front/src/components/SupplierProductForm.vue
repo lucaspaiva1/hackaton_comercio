@@ -82,8 +82,10 @@
                 v-model="form.delivery_price"
                 required
                 data-vv-as="Valor da entrega"
-              ></b-form-input> </b-form-group
-          ></b-col>
+              >
+              </b-form-input>
+            </b-form-group>
+          </b-col>
         </b-row>
 
         <b-row class="mt-3">
