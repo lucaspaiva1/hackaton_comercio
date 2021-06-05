@@ -10,10 +10,20 @@
         <h4 class="product-price">R$ {{ product.price.toFixed(2) }}</h4>
       </div>
       <div class="mt-4">
-        <small
-          >Quantidade disponível:
-          <b>{{ product.quantity }} {{ quantityLabel }}</b></small
-        >
+        <small>
+          Quantidade disponível:
+          <b>{{ product.quantity }} {{ quantityLabel }}</b>
+        </small>
+      </div>
+      <div>
+        <h6>Opções de envio</h6>
+        <b-table
+          id="delivery_methods"
+          striped
+          :fields="fields"
+          :items="deliveryTypes"
+          borderless
+        ></b-table>
       </div>
       <hr class="my-4" />
       <div class="w-100">
@@ -29,6 +39,27 @@
         </b-button>
       </div>
     </b-card>
+
+    <b-card class="m-3">
+      <h6 class="supplier-header">
+        Informações sobre a loja
+      </h6>
+      <div>
+        <h3>
+          Paulo Acessórios
+        </h3>
+      </div>
+      <div class="mt-3">
+        <p class="address text-secondary">
+          Av. Rebouças, nº 300, Centro.
+          <br />
+          Feira de Santana - BA
+          <br />
+          <br />
+          (75) 99999-1414
+        </p>
+      </div>
+    </b-card>
   </div>
 </template>
 
@@ -40,6 +71,26 @@ export default {
     return {
       currentImage: null,
       loading: false,
+      fields: [
+        {
+          key: "type",
+          label: "",
+        },
+        {
+          key: "price",
+          label: "",
+        },
+      ],
+      deliveryTypes: [
+        {
+          type: "Retirada no local",
+          price: "R$ 0,00",
+        },
+        {
+          type: "Entrega",
+          price: "R$ 7,50",
+        },
+      ],
     };
   },
   mounted() {
@@ -70,5 +121,18 @@ h4.product-price {
   font-weight: 200 !important;
   font-size: 35px;
   font-weight: 500;
+}
+.supplier-header {
+  font-weight: 300;
+  font-size: 16px;
+}
+.address {
+  font-size: 15px;
+}
+#delivery_methods {
+  td {
+    color: #444444 !important;
+    font-size: 16px;
+  }
 }
 </style>

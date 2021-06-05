@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="customer-product-container">
     <div>
       <NavBar :customer="true" />
     </div>
@@ -50,3 +50,8 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+.customer-product-container {
+  background: #eeffeb;
+}
+</style>
