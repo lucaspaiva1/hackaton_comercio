@@ -1,21 +1,35 @@
-## API SETUP
+## Configurar Frontend
+
+```bash
+cd front
+```
+
+#### Instalar dependencias
+
+```bash
+npm install
+```
+
+## Configurar API
 
 ```bash
 cd api
 ```
 
-#### Create database [sqlite]
+#### Instalar dependencias
 
 ```bash
-node_modules/.bin/sequelize db:migrate
-# or
-npx sequelize db:migrate
+npm install
 ```
 
-#### Create Seeds
+#### Criar banco de dados [sqlite]
 
 ```bash
-node_modules/.bin/sequelize db:seed:all
-# or
-npx sequelize db:seed:all
+npm run migrate
+```
+
+#### Popular banco de dados
+
+```bash
+npm run seed
 ```

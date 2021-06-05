@@ -49,8 +49,24 @@ app.get("/suppliers", (req, res) => {
 });
 
 app.post("/suppliers", (req, res) => {
-  const { name, password, document, city } = req.body;
-  return db.Supplier.create({ name, password, document, city })
+  const {
+    name,
+    password,
+    document,
+    city,
+    address,
+    number,
+    district,
+  } = req.body;
+  return db.Supplier.create({
+    name,
+    password,
+    document,
+    city,
+    address,
+    number,
+    district,
+  })
     .then((supplier) => res.send(supplier))
     .catch((err) => {
       return res.status(400).send(err);

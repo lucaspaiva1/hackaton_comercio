@@ -21,8 +21,18 @@ const createProduct = (product) => {
   return axios.post(`${BASE_URL}/products`, product);
 };
 
+const createAffiliate = (affiliate) => {
+  return axios.post(`${BASE_URL}/affiliates`, affiliate);
+};
+
+const createSupplier = (supplier) => {
+  return axios.post(`${BASE_URL}/suppliers`, supplier);
+};
+
 export default {
   login,
   productsBySupplier,
   createProduct,
+  createAffiliate,
+  createSupplier,
 };
