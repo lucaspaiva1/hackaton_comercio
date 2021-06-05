@@ -3,7 +3,12 @@
     <div>
       <NavBar />
     </div>
-    <div v-if="!loading">
+    <div v-if="error" class="error-container">
+      <div class="mt-3">
+        Produto não encontrado.
+      </div>
+    </div>
+    <div v-else-if="!loading && product">
       <div class="container">
         <div>
           <b-button variant="link" @click="back">Voltar</b-button>
@@ -33,22 +38,8 @@
 import NavBar from "@/components/NavBar.vue";
 import AffiliateProductInfo from "@/components/AffiliateProductInfo.vue";
 import ProductInfo from "@/components/ProductInfo.vue";
-import API from "@/api";
 
-const product = {
-  name: "Capa iphone 8",
-  price: 10.9,
-  comission: 1.0,
-  quantity: 10,
-  description:
-    "Capa de couro para iPhone 8 de cor preta, ótimo acabamento e perfeito apara você que gosta de um design arroado.",
-  image_1:
-    "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/MQHM2_AV1_GOLD_GEO_BR?wid=572&hei=572&fmt=jpeg&qlt=95&.v=1547676786164",
-  image_2:
-    "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/MQHM2_AV1_SPACE_GRAY_GEO_BR?wid=572&hei=572&fmt=jpeg&qlt=95&.v=1547676966944",
-  image_3:
-    "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/MQHM2?wid=572&hei=572&fmt=jpeg&qlt=95&.v=1516659531508",
-};
+import API from "@/api";
 
 export default {
   name: "AffiliateProduct",
@@ -60,8 +51,10 @@ export default {
   },
   data() {
     return {
-      product,
+      product: null,
       loading: false,
+      loadingOrders: false,
+      error: false,
     };
   },
   mounted() {
@@ -70,8 +63,15 @@ export default {
   methods: {
     async loadProduct(product_id) {
       this.loading = true;
-      const response = await API.product(product_id);
-      this.product = { ...response.data };
+      try {
+        const response = await API.product(product_id);
+        if (!response.data) {
+          this.error = true;
+        }
+        this.product = { ...response.data };
+      } catch (err) {
+        this.error = true;
+      }
       this.loading = false;
     },
     back() {
@@ -82,6 +82,7 @@ export default {
 </script>
 
 <style>
+.error-container,
 .loading-container {
   display: flex;
   flex-direction: column;

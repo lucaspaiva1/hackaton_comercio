@@ -7,6 +7,8 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use(express.json({ limit: "5000mb" }));
 
+// cors
+
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header(
@@ -15,6 +17,8 @@ app.use(function (req, res, next) {
   );
   next();
 });
+
+// AUTH
 
 app.post("/login", async (req, res) => {
   try {
@@ -39,6 +43,8 @@ app.post("/login", async (req, res) => {
     return res.send(err);
   }
 });
+
+// SUPPLIERS
 
 app.get("/suppliers", (req, res) => {
   return db.Supplier.findAll()
@@ -73,6 +79,57 @@ app.post("/suppliers", (req, res) => {
     });
 });
 
+app.get("/supplier/:supplier_id/orders", (req, res) => {
+  return db.Order.findAll({
+    where: { supplierId: req.params.supplier_id },
+    include: ["supplier", "product", "affiliate"],
+  })
+    .then((order) => res.send(order))
+    .catch((err) => {
+      return res.send(err);
+    });
+});
+
+app.get("/supplier/:supplier_id/products", (req, res) => {
+  return db.Product.findAll({
+    where: { supplierId: req.params.supplier_id },
+  })
+    .then((products) => res.send(products))
+    .catch((err) => {
+      return res.send(err);
+    });
+});
+
+// ORDER
+
+app.post("/orders", (req, res) => {
+  const { supplierId, affiliateId, quantity, productId } = req.body;
+  return db.Order.create({
+    supplierId,
+    affiliateId,
+    quantity,
+    productId,
+    createdAt: new Date().toDateString(),
+    updatedAt: new Date().toDateString(),
+  })
+    .then((order) => res.send(order))
+    .catch((err) => {
+      return res.status(400).send(err);
+    });
+});
+
+// AFFILIATE
+
+app.get("/affiliates/:id", (req, res) => {
+  return db.Affiliate.findByPk(req.params.id)
+    .then((affiliate) => {
+      return res.send(affiliate);
+    })
+    .catch((err) => {
+      return res.send(err);
+    });
+});
+
 app.get("/affiliates", (req, res) => {
   return db.Affiliate.findAll()
     .then((affiliate) => res.send(affiliate))
@@ -90,9 +147,12 @@ app.post("/affiliates", (req, res) => {
     });
 });
 
-app.get("/products/:id", (req, res) => {
-  return db.Product.findOne({ where: { id: req.params.id } })
-    .then((product) => res.send(product))
+app.get("/affiliate/:affiliate_id/orders", (req, res) => {
+  return db.Order.findAll({
+    where: { affiliateId: req.params.affiliate_id },
+    include: ["supplier", "product", "affiliate"],
+  })
+    .then((order) => res.send(order))
     .catch((err) => {
       return res.send(err);
     });
@@ -143,6 +203,21 @@ app.get("/affiliate/:affiliate_id/products/available", async (req, res) => {
     });
 });
 
+// PRODUCT
+
+app.get("/products/:id", (req, res) => {
+  return db.Product.findOne({
+    where: { id: req.params.id },
+    include: [{ model: db.Supplier, as: "supplier" }],
+  })
+    .then((product) => {
+      return res.send(product);
+    })
+    .catch((err) => {
+      return res.send(err);
+    });
+});
+
 app.get("/products", (req, res) => {
   return db.Product.findAll()
     .then((product) => res.send(product))
@@ -177,6 +252,8 @@ app.post("/products", (req, res) => {
     image_3,
     delivery,
     delivery_price,
+    createdAt: new Date().toDateString(),
+    updatedAt: new Date().toDateString(),
   })
     .then((product) => res.send(product))
     .catch((err) => {

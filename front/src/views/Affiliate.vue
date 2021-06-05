@@ -12,6 +12,11 @@
           <AffiliateProducts :products="products" />
         </b-col>
       </b-row>
+      <b-row>
+        <b-col sm="12">
+          <AffiliateOrders :loading="loadingOrders" :orders="orders" />
+        </b-col>
+      </b-row>
     </div>
   </div>
 </template>
@@ -21,6 +26,7 @@ import NavBar from "@/components/NavBar.vue";
 import AffiliateProducts from "@/components/AffiliateProducts.vue";
 import AffiliateAvailableProductsList from "@/components/AffiliateAvailableProductsList.vue";
 import API from "@/api";
+import AffiliateOrders from "@/components/AffiliateOrders.vue";
 
 export default {
   name: "Supplier",
@@ -28,6 +34,7 @@ export default {
     NavBar,
     AffiliateProducts,
     AffiliateAvailableProductsList,
+    AffiliateOrders,
   },
   data() {
     return {
@@ -42,6 +49,7 @@ export default {
     this.affiliate = JSON.parse(localStorage.getItem("current_user"));
     this.loadAvailableProducts();
     this.loadProducts();
+    this.loadOrders(this.affiliate.user.id);
   },
   methods: {
     async loadAvailableProducts() {
@@ -55,6 +63,12 @@ export default {
       const response = await API.getProductAffiliate(this.affiliate.user.id);
       this.products = response.data;
       this.loadingProducts = true;
+    },
+    async loadOrders(affiliate_id) {
+      this.loadingOrders = true;
+      const response = await API.affiliateOrders(affiliate_id);
+      this.orders = response.data;
+      this.loadingOrders = false;
     },
   },
 };

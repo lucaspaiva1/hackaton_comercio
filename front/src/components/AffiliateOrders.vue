@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-card title="Meus Pedidos" class="m-3">
+    <b-card title="Minhas Vendas" class="m-3">
       <b-row>
         <b-col lg="6" class="my-1">
           <b-form-group
@@ -87,7 +87,7 @@
 
 <script>
 export default {
-  name: "SupplierOrders",
+  name: "AffiliateOrders",
   props: ["orders"],
   data() {
     return {

@@ -3,15 +3,28 @@
     <div>
       <NavBar :customer="true" />
     </div>
-    <div class="container">
+    <div v-if="error" class="error-container">
+      <div class="mt-3">
+        Produto não encontrado.
+      </div>
+    </div>
+    <div class="container" v-else-if="!loading && product && affiliate">
       <b-row>
         <b-col sm="8">
           <ProductInfo :product="product" />
         </b-col>
         <b-col sm="4">
-          <CustomerProductInfo :product="product" />
+          <CustomerProductInfo :product="product" :affiliate="affiliate" />
         </b-col>
       </b-row>
+    </div>
+    <div v-else>
+      <div class="loading-container">
+        <b-spinner style="width: 3rem; height: 3rem;"></b-spinner>
+        <div class="mt-3">
+          Carregando...
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -20,24 +33,11 @@
 import NavBar from "@/components/NavBar.vue";
 import CustomerProductInfo from "@/components/CustomerProductInfo.vue";
 import ProductInfo from "@/components/ProductInfo.vue";
-
-const product = {
-  name: "Capa iphone 8",
-  price: 10.9,
-  comission: 1.0,
-  quantity: 10,
-  description:
-    "Capa de couro para iPhone 8 de cor preta, ótimo acabamento e perfeito apara você que gosta de um design arroado.",
-  image_1:
-    "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/MQHM2_AV1_GOLD_GEO_BR?wid=572&hei=572&fmt=jpeg&qlt=95&.v=1547676786164",
-  image_2:
-    "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/MQHM2_AV1_SPACE_GRAY_GEO_BR?wid=572&hei=572&fmt=jpeg&qlt=95&.v=1547676966944",
-  image_3:
-    "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/MQHM2?wid=572&hei=572&fmt=jpeg&qlt=95&.v=1516659531508",
-};
+import API from "@/api";
 
 export default {
-  name: "AffiliateProduct",
+  name: "CustomerProduct",
+  props: ["affiliate_id", "product_id"],
   components: {
     NavBar,
     CustomerProductInfo,
@@ -45,13 +45,44 @@ export default {
   },
   data() {
     return {
-      product,
+      product: null,
+      loading: false,
+      error: false,
+      affiliate: null,
     };
+  },
+  mounted() {
+    this.loadProduct(this.product_id);
+    this.loadAffiliate(this.affiliate_id);
+  },
+  methods: {
+    async loadAffiliate(affiliate_id) {
+      try {
+        const response = await API.affiliate(affiliate_id);
+        if (!response.data) {
+          this.error = true;
+        }
+        this.affiliate = { ...response.data };
+      } catch (err) {
+        this.error = true;
+      }
+    },
+    async loadProduct(product_id) {
+      this.loading = true;
+      try {
+        const response = await API.product(product_id);
+        if (!response.data) {
+          this.error = true;
+        }
+        this.product = { ...response.data };
+      } catch (err) {
+        this.error = true;
+      }
+      this.loading = false;
+    },
+    back() {
+      this.$router.push({ path: "/affiliate" });
+    },
   },
 };
 </script>
-<style lang="scss" scoped>
-.customer-product-container {
-  background: #eeffeb;
-}
-</style>

@@ -94,6 +94,12 @@ export default {
       width: 450px;
       height: 450px;
     }
+    @media only screen and (max-width: 575px) {
+      .image-item {
+        width: 200px;
+        height: 200px;
+      }
+    }
   }
   img {
     object-fit: contain;

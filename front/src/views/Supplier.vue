@@ -39,47 +39,28 @@ export default {
   data() {
     return {
       products: [],
-      orders: [
-        {
-          product: {
-            name: "Iphone 6s",
-            price: 1600.0,
-            comission: 100.0,
-          },
-          status: "pending",
-          created_at: "2021-01-01 10:00:00",
-        },
-        {
-          product: {
-            name: "Iphone 8",
-            price: 2400.0,
-            comission: 100.0,
-          },
-          status: "done",
-          created_at: "2021-01-01 10:00:00",
-        },
-      ],
+      orders: [],
       loadingProducts: false,
       loadingOrders: false,
+      supplier: null,
     };
   },
   mounted() {
+    this.supplier = JSON.parse(localStorage.getItem("current_user"));
     this.loadProducts();
     this.loadOrders();
   },
   methods: {
     async loadProducts() {
-      const supplier = JSON.parse(localStorage.getItem("current_user"));
       this.loadingProducts = true;
-      const response = await API.productsBySupplier(supplier.user.id);
+      const response = await API.productsBySupplier(this.supplier.user.id);
       this.products = response.data;
       this.loadingProducts = false;
     },
     async loadOrders() {
-      // const supplier = JSON.parse(localStorage.getItem("current_user"));
       this.loadingOrders = true;
-      // const response = await API.ordersBySupplier(supplier.user.id);
-      // this.orders = response.data;
+      const response = await API.supplierOrders(this.supplier.user.id);
+      this.orders = response.data;
       this.loadingOrders = false;
     },
     onCreateProduct() {

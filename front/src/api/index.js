@@ -14,7 +14,7 @@ const login = ({ username, password }) => {
 };
 
 const productsBySupplier = (supplier_id) => {
-  return axios.get(`${BASE_URL}/products?supplier=${supplier_id}`);
+  return axios.get(`${BASE_URL}/supplier/${supplier_id}/products`);
 };
 
 const product = (product_id) => {
@@ -33,6 +33,10 @@ const createAffiliate = (affiliate) => {
   return axios.post(`${BASE_URL}/affiliates`, affiliate);
 };
 
+const affiliate = (affiliate_id) => {
+  return axios.get(`${BASE_URL}/affiliates/${affiliate_id}`);
+};
+
 const createSupplier = (supplier) => {
   return axios.post(`${BASE_URL}/suppliers`, supplier);
 };
@@ -41,6 +45,18 @@ const productAffiliate = (affiliate_id, product_id) => {
   return axios.post(
     `${BASE_URL}/affiliate/${affiliate_id}/products/${product_id}`
   );
+};
+
+const createOrder = (data) => {
+  return axios.post(`${BASE_URL}/orders`, data);
+};
+
+const supplierOrders = (supplier_id) => {
+  return axios.get(`${BASE_URL}/supplier/${supplier_id}/orders`);
+};
+
+const affiliateOrders = (affiliate_id) => {
+  return axios.get(`${BASE_URL}/affiliate/${affiliate_id}/orders`);
 };
 
 const getProductAffiliate = (affiliate_id) => {
@@ -57,4 +73,8 @@ export default {
   product,
   productAffiliate,
   getProductAffiliate,
+  affiliate,
+  createOrder,
+  supplierOrders,
+  affiliateOrders,
 };

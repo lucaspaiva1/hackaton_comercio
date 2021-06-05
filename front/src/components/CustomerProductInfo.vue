@@ -7,7 +7,9 @@
         </h3>
       </div>
       <div class="mt-3">
-        <h4 class="product-price">R$ {{ product.price.toFixed(2) }}</h4>
+        <h4 class="product-price">
+          R$ {{ parseFloat(product.price).toFixed(2) }}
+        </h4>
       </div>
       <div class="mt-4">
         <small>
@@ -16,7 +18,7 @@
         </small>
       </div>
       <div>
-        <h6>Opções de envio</h6>
+        <h6 class="mb-0 mt-4">Opções de envio</h6>
         <b-table
           id="delivery_methods"
           striped
@@ -26,17 +28,55 @@
         ></b-table>
       </div>
       <hr class="my-4" />
+      <b-form-group class="mb-3" label="Quantidade">
+        <b-form-input
+          id="quantity"
+          type="number"
+          name="quantity"
+          :max="product.quantity"
+          v-model="form.quantity"
+          required
+        ></b-form-input>
+      </b-form-group>
       <div class="w-100">
         <b-button
           class="w-100"
           block
           size="lg"
           variant="success"
-          @click="submit"
+          v-b-modal.voucher
+          @click="validateQuantity"
         >
           <b-spinner v-if="loading" small />
           Comprar agora
         </b-button>
+
+        <b-modal id="voucher" title="Imprimir Voucher" @ok="generateVoucher">
+          <div id="printable" class="voucher">
+            <img src="@/assets/qrcode.png" alt="" width="200" />
+            <div>
+              <div>
+                <label class="text-muted"><b>Vendedor</b></label>
+                <p>{{ affiliate.name }}</p>
+              </div>
+              <div>
+                <label class="text-muted"><b>Produto</b></label>
+                <p>{{ product.name }}</p>
+              </div>
+              <div>
+                <label class="text-muted"><b>Quantidade</b></label>
+                <p>{{ form.quantity }}</p>
+              </div>
+              <div>
+                <label class="text-muted"><b>Subtotal</b></label>
+                <p>
+                  R$
+                  {{ parseFloat(form.quantity * product.price).toFixed(2) }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </b-modal>
       </div>
     </b-card>
 
@@ -46,17 +86,18 @@
       </h6>
       <div>
         <h3>
-          Paulo Acessórios
+          {{ product.supplier.name }}
         </h3>
       </div>
       <div class="mt-3">
         <p class="address text-secondary">
-          Av. Rebouças, nº 300, Centro.
+          {{ product.supplier.address }}, nº {{ product.supplier.number }},
+          {{ product.supplier.district }}.
           <br />
-          Feira de Santana - BA
+          {{ product.supplier.city }}
           <br />
           <br />
-          (75) 99999-1414
+          {{ product.supplier.phone }}
         </p>
       </div>
     </b-card>
@@ -64,13 +105,20 @@
 </template>
 
 <script>
+import html2canvas from "html2canvas";
+import canvas2image from "canvas2image-2";
+import API from "@/api";
+
 export default {
-  name: "AffiliateProductInfo",
-  props: ["product"],
+  name: "CustomerProductInfo",
+  props: ["product", "affiliate"],
   data() {
     return {
       currentImage: null,
       loading: false,
+      form: {
+        quantity: 1,
+      },
       fields: [
         {
           key: "type",
@@ -81,24 +129,26 @@ export default {
           label: "",
         },
       ],
-      deliveryTypes: [
-        {
-          type: "Retirada no local",
-          price: "R$ 0,00",
-        },
-        {
-          type: "Entrega",
-          price: "R$ 7,50",
-        },
-      ],
     };
-  },
-  mounted() {
-    this.currentImage = this.product.image_1;
   },
   computed: {
     quantityLabel() {
       return this.product.quantity > 1 ? "unidades" : "unidade";
+    },
+    deliveryTypes() {
+      const methods = [
+        {
+          type: "Retirada no local",
+          price: "Grátis",
+        },
+      ];
+      if (this.product.delivery) {
+        methods.push({
+          type: "Entrega",
+          price: `R$ ${parseFloat(this.product.delivery_price).toFixed(2)}`,
+        });
+      }
+      return methods;
     },
   },
   methods: {
@@ -111,6 +161,28 @@ export default {
         this.loading = false;
         this.$router.push("/affiliate");
       }, 200);
+    },
+    validateQuantity() {
+      if (this.form.quantity < 0) {
+        this.form.quantity = 1;
+      }
+      if (this.form.quantity > this.product.quantity) {
+        this.form.quantity = this.product.quantity;
+      }
+    },
+    async generateVoucher() {
+      const element = document.getElementById("printable");
+      html2canvas(element, {
+        useCORS: true,
+      }).then((canvas) => {
+        canvas2image.saveAsPNG(canvas, canvas.width, canvas.height);
+      });
+      await API.createOrder({
+        quantity: this.form.quantity,
+        affiliateId: this.affiliate.id,
+        productId: this.product.id,
+        supplierId: this.product.supplier.id,
+      });
     },
   },
 };
@@ -133,6 +205,15 @@ h4.product-price {
   td {
     color: #444444 !important;
     font-size: 16px;
+  }
+}
+</style>
+
+<style lang="scss" scoped>
+.voucher {
+  display: flex;
+  img {
+    margin-right: 15px;
   }
 }
 </style>
