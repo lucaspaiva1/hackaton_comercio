@@ -39,6 +39,14 @@ module.exports = {
       image_3: {
         type: Sequelize.TEXT,
       },
+      delivery: {
+        type: Sequelize.TEXT,
+        defaultValue: false,
+      },
+      delivery_price: {
+        type: Sequelize.TEXT,
+        defaultValue: 0,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

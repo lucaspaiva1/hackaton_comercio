@@ -60,6 +60,7 @@ export default {
         },
       ],
       loadingProducts: false,
+      loadingOrders: false,
     };
   },
   mounted() {

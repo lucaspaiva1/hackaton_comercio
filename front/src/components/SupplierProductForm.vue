@@ -89,38 +89,38 @@
         <b-row class="mt-3">
           <b-col>
             <vue-image-chooser
+              v-if="!loading"
               height="120px"
               name="image-chooser1"
               :displayName="'Addd'"
               @change="(file) => uploadFile(file, 1)"
-              :progress="progress"
-              :error="error"
             />
           </b-col>
           <b-col>
             <vue-image-chooser
+              v-if="!loading"
               height="120px"
               name="image-chooser2"
               :displayName="'Adicionar foto'"
               @change="(file) => uploadFile(file, 2)"
-              :progress="progress"
-              :error="error"
             />
           </b-col>
           <b-col>
             <vue-image-chooser
+              v-if="!loading"
               height="120px"
               name="image-chooser3"
               :displayName="'Adicionar foto'"
               @change="(file) => uploadFile(file, 3)"
-              :progress="progress"
-              :error="error"
             />
           </b-col>
         </b-row>
 
         <div class="mt-3">
-          <b-button type="submit" variant="success">Cadastrar</b-button>
+          <b-button type="submit" variant="success">
+            <b-spinner small v-if="loading"></b-spinner>
+            Cadastrar
+          </b-button>
         </div>
       </b-form>
     </b-card>
@@ -142,6 +142,9 @@ export default {
         quantity: 0,
         delivery: false,
         delivery_price: 0,
+        image_1: null,
+        image_2: null,
+        image_3: null,
       },
       supplier: null,
       loading: false,
@@ -165,10 +168,19 @@ export default {
         price: 0,
         comission: 0,
         quantity: 0,
+        image_1: null,
+        image_2: null,
+        image_3: null,
+        delivery: false,
+        delivery_price: 0,
       };
     },
     uploadFile(file, id) {
-      console.log(id, file);
+      const reader = new FileReader();
+      reader.readAsDataURL(file.file);
+      reader.onloadend = () => {
+        this.form[`image_${id}`] = reader.result;
+      };
     },
     async onSubmit() {
       this.loading = true;

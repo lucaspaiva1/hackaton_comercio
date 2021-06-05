@@ -1,11 +1,11 @@
 const express = require("express");
-const db = require("./models");
 
+const db = require("./models");
 const app = express();
 
 app.use(express.urlencoded({ extended: false }));
 
-app.use(express.json());
+app.use(express.json({ limit: "5000mb" }));
 
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -99,16 +99,20 @@ app.get("/products", (req, res) => {
 });
 
 app.post("/products", (req, res) => {
+  console.log("hers");
   const {
     name,
     description,
     quantity,
     price,
     comission,
+    delivery,
+    delivery_price,
     image_1,
     image_2,
     image_3,
   } = req.body;
+  console.log(image_1);
   return db.Product.create({
     name,
     description,
@@ -118,6 +122,8 @@ app.post("/products", (req, res) => {
     image_1,
     image_2,
     image_3,
+    delivery,
+    delivery_price,
   })
     .then((product) => res.send(product))
     .catch((err) => {
