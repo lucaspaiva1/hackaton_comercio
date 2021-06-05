@@ -21,6 +21,7 @@ module.exports = (sequelize, DataTypes) => {
       image_1: DataTypes.TEXT,
       image_2: DataTypes.TEXT,
       image_3: DataTypes.TEXT,
+      supplierId: DataTypes.INTEGER,
     },
     {
       sequelize,
@@ -29,7 +30,15 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   Product.associate = (models) => {
-    Product.belongsTo(models.Supplier);
+    Product.belongsTo(models.Supplier, {
+      foreignKey: "supplierId",
+      as: "supplier",
+    });
+    Product.belongsToMany(models.Affiliate, {
+      through: "ProductAffiliates",
+      foreignKey: "productId",
+      as: "affiliates",
+    });
   };
 
   return Product;

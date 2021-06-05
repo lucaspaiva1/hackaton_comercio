@@ -35,11 +35,13 @@ const routes = [
     path: "/affiliate/product/:product_id",
     name: "AffiliateProduct",
     component: AffiliateProduct,
+    props: true,
   },
   {
-    path: "/affiliate/:customer_id/product/:product_id",
+    path: "/affiliate/:affiliate_id/product/:product_id",
     name: "AffiliateProduct",
     component: CustomerProduct,
+    props: true,
   },
 ];
 

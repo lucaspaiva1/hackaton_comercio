@@ -160,9 +160,8 @@ export default {
           })
         );
         this.$router.push({ path: `/${this.user_type}` });
-        console.log(response);
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
       this.loading = false;
     },

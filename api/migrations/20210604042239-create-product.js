@@ -23,7 +23,7 @@ module.exports = {
       comission: {
         type: Sequelize.STRING,
       },
-      SupplierId: {
+      supplierId: {
         type: Sequelize.INTEGER,
         references: {
           model: "Suppliers",

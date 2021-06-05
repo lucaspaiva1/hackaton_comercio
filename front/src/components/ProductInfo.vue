@@ -3,21 +3,34 @@
     <b-card title="" class="m-3">
       <div class="image-container">
         <div class="image-selector-container">
-          <div class="image-item" @click="showImage(product.image_1)">
+          <div
+            v-if="product.image_1"
+            class="image-item"
+            @click="showImage(product.image_1)"
+          >
             <img :src="product.image_1" alt="" />
           </div>
-          <div class="image-item" @click="showImage(product.image_2)">
+          <div
+            v-if="product.image_2"
+            class="image-item"
+            @click="showImage(product.image_2)"
+          >
             <img :src="product.image_2" alt="" />
           </div>
 
-          <div class="image-item" @click="showImage(product.image_3)">
+          <div
+            v-if="product.image_3"
+            class="image-item"
+            @click="showImage(product.image_3)"
+          >
             <img :src="product.image_3" alt="" />
           </div>
         </div>
         <div class="main-image-container">
-          <div class="image-item">
-            <img :src="currentImage" alt="" />
+          <div v-if="currentImage" class="image-item">
+            <img :src="currentImage" />
           </div>
+          <div v-else class="py-5">Produto sem imagem</div>
         </div>
       </div>
       <hr />

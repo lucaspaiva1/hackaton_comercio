@@ -90,6 +90,59 @@ app.post("/affiliates", (req, res) => {
     });
 });
 
+app.get("/products/:id", (req, res) => {
+  return db.Product.findOne({ where: { id: req.params.id } })
+    .then((product) => res.send(product))
+    .catch((err) => {
+      return res.send(err);
+    });
+});
+
+app.post("/affiliate/:affiliate_id/products/:product_id", (req, res) => {
+  return db.ProductAffiliate.create({
+    productId: req.params.product_id,
+    affiliateId: req.params.affiliate_id,
+    createdAt: new Date().toDateString(),
+    updatedAt: new Date().toDateString(),
+  })
+    .then((productAffiliate) => res.send(productAffiliate))
+    .catch((err) => {
+      return res.send(err);
+    });
+});
+
+app.get("/affiliate/:affiliate_id/products", (req, res) => {
+  return db.Affiliate.findByPk(req.params.affiliate_id, {
+    include: ["products"],
+  })
+    .then((affiliate) => res.send(affiliate.products))
+    .catch((err) => {
+      return res.send(err);
+    });
+});
+
+app.get("/affiliate/:affiliate_id/products/available", async (req, res) => {
+  const allProducts = await db.Product.findAll({
+    include: [{ model: db.Supplier, as: "supplier" }],
+  });
+  return db.Affiliate.findByPk(req.params.affiliate_id, {
+    include: ["products"],
+  })
+    .then((affiliate) => {
+      const affiliateProducts = affiliate.products;
+      const result = allProducts.filter((product) => {
+        const alreadyTaken = affiliateProducts.find((p) => p.id === product.id);
+        if (alreadyTaken) return false;
+        if (!product.supplier) return false;
+        return product.supplier.city === affiliate.city;
+      });
+      return res.send(result);
+    })
+    .catch((err) => {
+      return res.send(err);
+    });
+});
+
 app.get("/products", (req, res) => {
   return db.Product.findAll()
     .then((product) => res.send(product))
@@ -99,9 +152,9 @@ app.get("/products", (req, res) => {
 });
 
 app.post("/products", (req, res) => {
-  console.log("hers");
   const {
     name,
+    supplierId,
     description,
     quantity,
     price,
@@ -112,9 +165,9 @@ app.post("/products", (req, res) => {
     image_2,
     image_3,
   } = req.body;
-  console.log(image_1);
   return db.Product.create({
     name,
+    supplierId,
     description,
     quantity,
     price,

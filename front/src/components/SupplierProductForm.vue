@@ -16,7 +16,7 @@
           <b-form-textarea
             class="form-control"
             placeholder="Descrição do produto"
-            v-model="form.observations"
+            v-model="form.description"
             required
             rows="4"
             max-rows="4"
@@ -138,7 +138,7 @@ export default {
     return {
       form: {
         name: "",
-        observations: "",
+        description: "",
         price: 0,
         comission: 0,
         quantity: 0,
@@ -157,7 +157,7 @@ export default {
   },
   methods: {
     createProduct() {
-      const product = { ...this.form, SupplierId: this.supplier.user.id };
+      const product = { ...this.form, supplierId: this.supplier.user.id };
       product.price = parseFloat(product.price);
       product.comission = parseFloat(product.comission);
       product.quantity = parseFloat(product.quantity);
@@ -166,7 +166,7 @@ export default {
     resetForm() {
       this.form = {
         name: "",
-        observations: "",
+        description: "",
         price: 0,
         comission: 0,
         quantity: 0,

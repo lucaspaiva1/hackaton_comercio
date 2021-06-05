@@ -2,18 +2,22 @@
   <div>
     <b-card title="" class="m-3">
       <div>
-        <h3>
+        <h3 class="text-capitalize">
           {{ product.name }}
         </h3>
       </div>
       <div class="mt-3">
         <small>Preço de venda</small>
-        <h4 class="product-price">R$ {{ product.price.toFixed(2) }}</h4>
+        <h4 class="product-price">
+          R$ {{ parseFloat(product.price).toFixed(2) }}
+        </h4>
       </div>
       <div class="mt-3">
         <small>Comissão</small>
         <br />
-        <h4 class="product-comission">R$ {{ product.comission.toFixed(2) }}</h4>
+        <h4 class="product-comission">
+          R$ {{ parseFloat(product.comission).toFixed(2) }}
+        </h4>
         <small>por unidade vendida</small>
       </div>
       <hr class="my-5" />
@@ -26,7 +30,7 @@
           @click="submit"
         >
           <b-spinner v-if="loading" small />
-          Venda esse produto
+          Adicionar ao meu catálogo
         </b-button>
       </div>
     </b-card>
@@ -34,6 +38,8 @@
 </template>
 
 <script>
+import API from "@/api";
+
 export default {
   name: "AffiliateProductInfo",
   props: ["product"],
@@ -41,9 +47,11 @@ export default {
     return {
       currentImage: null,
       loading: false,
+      affiliate: null,
     };
   },
   mounted() {
+    this.affiliate = JSON.parse(localStorage.getItem("current_user"));
     this.currentImage = this.product.image_1;
   },
   methods: {
@@ -52,10 +60,9 @@ export default {
     },
     async submit() {
       this.loading = true;
-      setTimeout(() => {
-        this.loading = false;
-        this.$router.push("/affiliate");
-      }, 200);
+      await API.productAffiliate(this.affiliate.user.id, this.product.id);
+      this.loading = false;
+      this.$router.push("/affiliate");
     },
   },
 };

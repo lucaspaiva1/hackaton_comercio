@@ -151,6 +151,7 @@ export default {
   watch: {
     products(value) {
       this.items = value.map((product) => ({
+        id: product.id,
         name: product.name,
         price: product.price,
         comission: product.comission,

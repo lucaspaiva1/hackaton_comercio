@@ -21,22 +21,6 @@ import NavBar from "@/components/NavBar.vue";
 import AffiliateProducts from "@/components/AffiliateProducts.vue";
 import AffiliateAvailableProductsList from "@/components/AffiliateAvailableProductsList.vue";
 import API from "@/api";
-const products = [
-  {
-    name: "Capa iphone 8",
-    price: 10.9,
-    comission: 1.0,
-    quantity: 10,
-    observations: "",
-  },
-  {
-    name: "Capa iphone 8 plus",
-    price: 10.9,
-    comission: 1.0,
-    observations: "",
-    quantity: 5,
-  },
-];
 
 export default {
   name: "Supplier",
@@ -47,23 +31,30 @@ export default {
   },
   data() {
     return {
-      products,
+      products: [],
       availableProducts: [],
       loading: false,
+      loadingProducts: false,
       affiliate: null,
     };
   },
   mounted() {
     this.affiliate = JSON.parse(localStorage.getItem("current_user"));
     this.loadAvailableProducts();
+    this.loadProducts();
   },
   methods: {
     async loadAvailableProducts() {
       this.loading = true;
       const response = await API.productsAvailable(this.affiliate.user.id);
       this.availableProducts = response.data;
-      console.log(response.data);
       this.loading = true;
+    },
+    async loadProducts() {
+      this.loadingProducts = true;
+      const response = await API.getProductAffiliate(this.affiliate.user.id);
+      this.products = response.data;
+      this.loadingProducts = true;
     },
   },
 };
